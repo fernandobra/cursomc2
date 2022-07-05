@@ -5,7 +5,6 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ser.std.StdArraySerializers.IntArraySerializer;
 import com.nelioalves.cursomc.domain.ItemPedido;
 import com.nelioalves.cursomc.domain.PagamentoComBoleto;
 import com.nelioalves.cursomc.domain.Pedido;
@@ -37,6 +36,9 @@ public class PedidoService {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EmailService emailService;
 
 	public Pedido find(Integer id) {
 		Pedido obj = repo.findOne(id);
@@ -70,7 +72,7 @@ public class PedidoService {
 		}
 		
 		itemPedidoRepository.save(obj.getItens());
-		System.out.println(obj);
+		emailService.sendOrderConfirmationEmail(obj);
 		return obj;
 	}
 }
